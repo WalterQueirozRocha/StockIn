@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import com.otaviowalter.stockin.enums.UserRoleENUM;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -31,6 +32,7 @@ public class Users {
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private UUID id;
 	private String name;
+	@Column(unique = true)
 	private String email;
 	private String password;
 	

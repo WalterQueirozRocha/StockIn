@@ -11,7 +11,7 @@ import com.otaviowalter.stockin.dto.users.UserDTO;
 import com.otaviowalter.stockin.model.SaleItems;
 import com.otaviowalter.stockin.model.Sales;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,9 +22,8 @@ import lombok.NoArgsConstructor;
 public class SalesDTO {
 
 	private UUID id;
-	@NotBlank(message = "there must be products")
+	@NotEmpty(message = "there must be products")
 	private List<SaleItemsDTO> productList = new ArrayList<>();
-	private BigDecimal subTotal;
 	private BigDecimal discountPercentage;
 	private BigDecimal total;
 	private UserDTO user;
@@ -37,7 +36,6 @@ public class SalesDTO {
 			productList.add(new SaleItemsDTO(products));
 		}
 
-		subTotal = entity.getSubTotal();
 		discountPercentage = entity.getDiscountPercentage();
 		total = entity.getTotal();
 		user = new UserDTO(entity.getUser());

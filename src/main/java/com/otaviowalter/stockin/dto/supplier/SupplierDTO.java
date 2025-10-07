@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import com.otaviowalter.stockin.dto.purchases.PurchasesDTO;
+import com.otaviowalter.stockin.dto.purchases.PurchasesMinDTO;
 import com.otaviowalter.stockin.model.Purchases;
 import com.otaviowalter.stockin.model.Supplier;
 
@@ -22,7 +22,7 @@ public class SupplierDTO {
 	private UUID id;
 	@NotBlank(message = "name is required")
 	private String name;
-	private List<PurchasesDTO> purchases = new ArrayList<>();
+	private List<PurchasesMinDTO> purchases = new ArrayList<>();
 	private Date createdAt;
 
 	public SupplierDTO(Supplier entity) {
@@ -30,7 +30,7 @@ public class SupplierDTO {
 		name = entity.getName();
 
 		for (Purchases purchase : entity.getPurchases()) {
-			purchases.add(new PurchasesDTO(purchase));
+			purchases.add(new PurchasesMinDTO(purchase));
 		}
 
 		createdAt = entity.getCreatedAt();

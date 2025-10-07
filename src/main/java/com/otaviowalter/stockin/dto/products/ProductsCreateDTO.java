@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import com.otaviowalter.stockin.dto.categorys.CategorysMinDTO;
+import com.otaviowalter.stockin.dto.categorys.CategorysDTO;
 import com.otaviowalter.stockin.enums.MeasureENUM;
 import com.otaviowalter.stockin.model.Categorys;
 import com.otaviowalter.stockin.model.Products;
@@ -18,21 +18,23 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductsDTO {
+public class ProductsCreateDTO {
 
 	private UUID id;
 	private String code;
 	private String ean;
 	private String description;
+	private int quantity;
+	private int minimalQuantity;
 	private BigDecimal price;
 	private BigDecimal cost;
 	private Boolean isFractional;
 	private MeasureENUM measure;
-	private List<CategorysMinDTO> category = new ArrayList<>();
+	private List<CategorysDTO> category = new ArrayList<>();
 	private String image;
 	private Date createdAt;
 
-	public ProductsDTO(Products entity) {
+	public ProductsCreateDTO(Products entity) {
 		id = entity.getId();
 		code = entity.getCode();
 		ean = entity.getEan();
@@ -43,7 +45,7 @@ public class ProductsDTO {
 		measure = entity.getMeasure();
 
 		for (Categorys categorys : entity.getCategory()) {
-			category.add(new CategorysMinDTO(categorys));
+			category.add(new CategorysDTO(categorys));
 		}
 
 		image = entity.getImage();

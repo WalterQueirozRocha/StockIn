@@ -1,4 +1,4 @@
-package com.otaviowalter.stockin.repository;
+package com.otaviowalter.stockin.repositorys;
 
 import java.math.BigInteger;
 

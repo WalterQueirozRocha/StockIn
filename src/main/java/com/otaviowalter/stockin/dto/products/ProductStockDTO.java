@@ -1,14 +1,9 @@
 package com.otaviowalter.stockin.dto.products;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
-import com.otaviowalter.stockin.dto.categorys.CategorysMinDTO;
 import com.otaviowalter.stockin.enums.MeasureENUM;
-import com.otaviowalter.stockin.model.Categorys;
 import com.otaviowalter.stockin.model.Products;
 
 import lombok.AllArgsConstructor;
@@ -18,37 +13,22 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductsDTO {
+public class ProductStockDTO {
 
 	private UUID id;
 	private String code;
 	private String ean;
 	private String description;
 	private BigDecimal price;
-	private BigDecimal cost;
-	private Boolean isFractional;
 	private MeasureENUM measure;
-	private List<CategorysMinDTO> category = new ArrayList<>();
 	private String image;
-	private Date createdAt;
 
-	public ProductsDTO(Products entity) {
+	public ProductStockDTO(Products entity) {
 		id = entity.getId();
 		code = entity.getCode();
 		ean = entity.getEan();
 		description = entity.getDescription();
 		price = entity.getPrice();
-		cost = entity.getCost();
-		isFractional = entity.getIsFractional();
 		measure = entity.getMeasure();
-
-		for (Categorys categorys : entity.getCategory()) {
-			category.add(new CategorysMinDTO(categorys));
-		}
-
-		image = entity.getImage();
-		createdAt = entity.getCreatedAt();
-
 	}
-
 }

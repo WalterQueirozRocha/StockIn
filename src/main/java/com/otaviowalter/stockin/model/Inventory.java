@@ -9,7 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -22,20 +22,20 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-@Entity(name = "sales_items")
-@Table(name = "tb_sales_items")
-public class SaleItems {
+@Entity
+@Table(name = "tb_inventory")
+public class Inventory {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.UUID)
-	private UUID id;
-	
-	@ManyToOne
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+
+    @OneToOne
     @JoinColumn(name = "product_id", nullable = false)
     private Products product;
-	private int quantity;
-	private String Description;
-	private BigDecimal subTotalPrice;
-	private Instant createdAt;
 
+    private int currentQuantity;
+    private int minimalQuantity;
+    private BigDecimal lastCost;
+    private Instant lastUpdate;
 }

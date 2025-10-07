@@ -2,14 +2,12 @@ package com.otaviowalter.stockin.dto.salesitems;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 import com.otaviowalter.stockin.dto.products.ProductsDTO;
-import com.otaviowalter.stockin.model.Products;
 import com.otaviowalter.stockin.model.SaleItems;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,22 +18,20 @@ import lombok.NoArgsConstructor;
 public class SaleItemsDTO {
 
 	private UUID id;
-	private List<ProductsDTO> products = new ArrayList<>();
+	@NotNull
+	private ProductsDTO product;
+	@NotNull
 	private int quantity;
-	private BigDecimal unitPrice;
-	private BigDecimal totalPrice;
+	private String description;
+	private BigDecimal subTotalPrice;
 	private Instant createdAt;
 
 	public SaleItemsDTO(SaleItems entity) {
 		id = entity.getId();
-
-		for (Products product : entity.getProducts()) {
-			products.add(new ProductsDTO(product));
-		}
-
+		product = new ProductsDTO(entity.getProduct()); 
+		subTotalPrice = entity.getSubTotalPrice();
 		quantity = entity.getQuantity();
-		unitPrice = entity.getTotalPrice();
-		totalPrice = entity.getTotalPrice();
+		description = entity.getDescription();
 		createdAt = entity.getCreatedAt();
 	}
 

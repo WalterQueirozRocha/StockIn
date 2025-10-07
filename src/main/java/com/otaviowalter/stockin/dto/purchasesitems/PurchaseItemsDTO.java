@@ -4,8 +4,10 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.UUID;
 
+import com.otaviowalter.stockin.dto.products.ProductsDTO;
 import com.otaviowalter.stockin.model.PurchaseItems;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,20 +18,22 @@ import lombok.NoArgsConstructor;
 public class PurchaseItemsDTO {
 	
 	private UUID id;
-	private String code;
-	private String description;
+	@NotNull
+	private ProductsDTO product;
+	@NotNull
 	private int quantity;
-	private BigDecimal price;
-	private BigDecimal cost;
+	private String description;
+	private BigDecimal subTotalPrice;
+	private BigDecimal subTotalCost;
 	private Date createdAt;
 	
 	public PurchaseItemsDTO(PurchaseItems entity) {
 		id = entity.getId();
-		code = entity.getCode();
+		product = new ProductsDTO(entity.getProduct());
 		description = entity.getDescription();
 		quantity = entity.getQuantity();
-		price = entity.getPrice();
-		cost = entity.getCost();
 		createdAt = entity.getCreatedAt();
+		subTotalPrice = entity.getSubTotalPrice();
+		subTotalCost = entity.getSubTotalCost();
 	}
 }

@@ -39,8 +39,6 @@ public class Products {
 	private String code;
 	private String ean;
 	private String description;
-	private int quantity;
-	private int minimalQuantity;
 	private BigDecimal price;
 	private BigDecimal cost;
 	private Boolean isFractional;
@@ -49,7 +47,7 @@ public class Products {
 	private MeasureENUM measure;
 
 	@ManyToMany
-	@JoinTable(name = "product_category", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
+	@JoinTable(name = "tb_product_category", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
 	private List<Categorys> category = new ArrayList<>();
 	
 	private String image;
