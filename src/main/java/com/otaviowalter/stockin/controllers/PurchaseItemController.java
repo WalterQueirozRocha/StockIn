@@ -36,13 +36,13 @@ public class PurchaseItemController {
 	}
 
 	@GetMapping
-	public ResponseEntity<Page<PurchaseItemsDTO>> findAllTransactions(Pageable pageable) {
+	public ResponseEntity<Page<PurchaseItemsDTO>> findAllPurchaseItems(Pageable pageable) {
 		Page<PurchaseItemsDTO> dtoPages = service.findAll(pageable);
 		return ResponseEntity.ok(dtoPages);
 	}
 
 	@PostMapping("/register")
-	public ResponseEntity<PurchaseItemsDTO> createSale(@RequestBody @Valid PurchaseItemsDTO createPurchaseItem) {
+	public ResponseEntity<PurchaseItemsDTO> createPurchaseItem(@RequestBody @Valid PurchaseItemsDTO createPurchaseItem) {
 		PurchaseItemsDTO createdPurchaseItem = service.create(createPurchaseItem);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(createdPurchaseItem.getId()).toUri();
@@ -50,14 +50,14 @@ public class PurchaseItemController {
 	}
 
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<PurchaseItemsDTO> updateSupplier(@PathVariable UUID id,
+	public ResponseEntity<PurchaseItemsDTO> updatePurchaseItem(@PathVariable UUID id,
 			@RequestBody @Valid PurchaseItemsDTO dto) {
 		dto = service.update(id, dto);
 		return ResponseEntity.ok(dto);
 	}
 
 	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<Void> deleteTransaction(@PathVariable UUID id) {
+	public ResponseEntity<Void> deletePurchaseItem(@PathVariable UUID id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
 

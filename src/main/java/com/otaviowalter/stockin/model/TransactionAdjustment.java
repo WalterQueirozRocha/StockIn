@@ -8,7 +8,6 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -20,8 +19,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-@Entity(name = "transactional")
-@Table(name = "tb_transactional")
+@Entity(name = "transactional_cost_adjustment")
 public class TransactionAdjustment extends Transaction {
 
 	@ManyToMany(fetch = FetchType.LAZY)
@@ -29,3 +27,4 @@ public class TransactionAdjustment extends Transaction {
 	private List<Products> items = new ArrayList<>();
 
 }
+ 

@@ -16,7 +16,6 @@ import com.otaviowalter.stockin.exception.ResourceNotFoundException;
 import com.otaviowalter.stockin.model.Purchases;
 import com.otaviowalter.stockin.model.Sales;
 import com.otaviowalter.stockin.model.Transaction;
-import com.otaviowalter.stockin.model.TransactionPurchase;
 import com.otaviowalter.stockin.model.Users;
 import com.otaviowalter.stockin.repositorys.PurchasesRepository;
 import com.otaviowalter.stockin.repositorys.SalesRepository;
@@ -60,30 +59,29 @@ public class TransactionService {
 	@Transactional
 	public TransactionDTO create(TransactionDTO newTransaction) {
 		Transaction transaction = new Transaction();
-		
-		if (newTransaction instanceof PurchaseTransactionDTO purchaseDTO && purchaseDTO.getPurchase() != null) {
-	        Purchases purchase = purchasesRepository.getReferenceById(purchaseDTO.getPurchase().getId());
-	        transaction.setPurchase(purchase);
-	        transaction.setTotalPrice(purchase.getTotalCost());
-	    }
 
-	    if (newTransaction instanceof SaleTransactionDTO saleDTO && saleDTO.getSale() != null) {
-	        Sales sale = saleRepository.getReferenceById(saleDTO.getSale().getId());
-	        transaction.setSales(sale);
-	        transaction.setTotalPrice(sale.getTotal());
-	    }
-		
+		if (newTransaction instanceof PurchaseTransactionDTO purchaseDTO && purchaseDTO.getPurchase() != null) {
+			Purchases purchase = purchasesRepository.getReferenceById(purchaseDTO.getPurchase().getId());
+			transaction.setPurchase(purchase);
+			transaction.setTotalPrice(purchase.getTotalCost());
+		}
+
+		if (newTransaction instanceof SaleTransactionDTO saleDTO && saleDTO.getSale() != null) {
+			Sales sale = saleRepository.getReferenceById(saleDTO.getSale().getId());
+			transaction.setSales(sale);
+			transaction.setTotalPrice(sale.getTotal());
+		}
+
 		Users user = userRepository.getReferenceById(newTransaction.getUser().getId());
-		
+
 		transaction.setType(newTransaction.getType());
 		transaction.setCreatedAt(new Date());
 		transaction.setUser(user);
 
 		Transaction savedTransaction = transactionRepository.save(transaction);
-		if(savedTransaction.getPurchase() != null) {
+		if (savedTransaction.getPurchase() != null) {
 			return new PurchaseTransactionDTO(savedTransaction);
-		}
-		else {
+		} else {
 			return new SaleTransactionDTO(savedTransaction);
 		}
 	}
