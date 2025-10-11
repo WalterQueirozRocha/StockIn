@@ -1,10 +1,14 @@
 package com.otaviowalter.stockin.model;import java.math.BigInteger;
 import java.util.Date;
 
+import com.otaviowalter.stockin.enums.TransactionENUM;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -19,6 +23,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
+@Inheritance(strategy = InheritanceType.JOINED)
 @Entity(name = "transactional")
 @Table(name = "tb_transactional")
 public class Transaction {
@@ -32,4 +37,6 @@ public class Transaction {
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private Users user;
+	
+	private TransactionENUM type;
 }

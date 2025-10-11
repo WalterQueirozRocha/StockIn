@@ -1,7 +1,7 @@
 package com.otaviowalter.stockin.dto.transaction;
 
 import com.otaviowalter.stockin.dto.purchases.PurchasesDTO;
-import com.otaviowalter.stockin.model.Transaction;
+import com.otaviowalter.stockin.model.TransactionPurchase;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,7 +14,7 @@ public class PurchaseTransactionDTO extends TransactionDTO {
 
 	private PurchasesDTO purchase;
 
-	public PurchaseTransactionDTO(Transaction entity) {
+	public PurchaseTransactionDTO(TransactionPurchase entity) {
 		super(entity);
 		this.purchase = new PurchasesDTO(entity.getPurchase());
 	}

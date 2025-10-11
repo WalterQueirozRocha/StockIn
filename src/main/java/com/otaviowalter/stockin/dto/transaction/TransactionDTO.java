@@ -29,8 +29,6 @@ public class TransactionDTO {
 
 	public TransactionDTO(Transaction entity) {
 		id = entity.getId();
-		type = entity.getType();
-		totalPrice = entity.getTotalPrice();
 		createdAt = new Date();
 		user = new UserDTO(entity.getUser());
 	}
