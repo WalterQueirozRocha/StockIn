@@ -1,5 +1,8 @@
 package com.otaviowalter.stockin.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
@@ -19,7 +22,6 @@ public class TransactionAdjustment extends Transaction {
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "tb_transaction_products", joinColumns = @JoinColumn(name = "transaction_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))
-	private Products item;
-
+	private List<Products> items = new ArrayList<>();
 }
  

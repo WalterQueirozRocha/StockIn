@@ -106,8 +106,9 @@ public class TransactionService {
 		Users user = userRepository.getReferenceById(newTransaction.getUser().getId());
 		transaction.setUser(user);
 
-		Products product = productRepository.getReferenceById(newTransaction.getItem().getId());
-		transaction.setItem(product);
+		List<Products> products = newTransaction.getItems().stream()
+				.map(itemDTO -> productRepository.getReferenceById(itemDTO.getId())).collect(Collectors.toList());
+		transaction.setItems(products);
 
 		return new AdjustmentTransactionDTO(transaction);
 	}

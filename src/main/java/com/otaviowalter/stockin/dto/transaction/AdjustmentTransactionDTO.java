@@ -1,5 +1,9 @@
 package com.otaviowalter.stockin.dto.transaction;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.otaviowalter.stockin.dto.products.ProductsDTO;
 import com.otaviowalter.stockin.model.TransactionAdjustment;
 
@@ -12,10 +16,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AdjustmentTransactionDTO extends TransactionDTO {
 
-	private ProductsDTO item;
+	private List<ProductsDTO> items = new ArrayList<>();
 
 	public AdjustmentTransactionDTO(TransactionAdjustment entity) {
 		super(entity);
-		this.item = new ProductsDTO(entity.getItem());
+		this.items = entity.getItems().stream().map(ProductsDTO::new).collect(Collectors.toList());
 	}
 }
