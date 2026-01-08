@@ -1,6 +1,8 @@
 package com.otaviowalter.stockin.model;import java.math.BigInteger;
-import java.util.Date;
+import java.time.Instant;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.otaviowalter.stockin.enums.TransactionENUM;
 
 import jakarta.persistence.Entity;
@@ -26,13 +28,25 @@ import lombok.Setter;
 @Inheritance(strategy = InheritanceType.JOINED)
 @Entity(name = "transactional")
 @Table(name = "tb_transactional")
+
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,       
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "transactionType"
+)
+@JsonSubTypes({
+    @JsonSubTypes.Type(value = TransactionSale.class, name = "SALE"),
+    @JsonSubTypes.Type(value = TransactionPurchase.class, name = "PURCHASE"),
+    @JsonSubTypes.Type(value = TransactionDevolution.class, name = "DEVOLUTION"),
+    @JsonSubTypes.Type(value = TransactionAdjustment.class, name = "ADJUSTMENT")
+})
 public class Transaction {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private BigInteger id;
 
-	private Date createdAt;
+	private Instant createdAt;
 
 	@ManyToOne
 	@JoinColumn(name = "user_id")

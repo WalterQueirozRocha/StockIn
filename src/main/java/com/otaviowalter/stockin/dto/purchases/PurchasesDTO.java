@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import com.otaviowalter.stockin.dto.purchasesitems.PurchaseItemsDTO;
 import com.otaviowalter.stockin.dto.supplier.SupplierMinDTO;
+import com.otaviowalter.stockin.dto.users.UserDTO;
 import com.otaviowalter.stockin.model.PurchaseItems;
 import com.otaviowalter.stockin.model.Purchases;
 
@@ -28,6 +29,7 @@ public class PurchasesDTO {
 	private String observation;
 	private Instant createdAt;
 	private SupplierMinDTO supplier;
+	private UserDTO user;
 
 	public PurchasesDTO(Purchases entity) {
 		id = entity.getId();
@@ -41,6 +43,7 @@ public class PurchasesDTO {
 		observation = entity.getObservation();
 		createdAt = entity.getCreatedAt();
 		supplier = new SupplierMinDTO(entity.getSupplier());
+		user = new UserDTO(entity.getUser());
 		
 	}
 

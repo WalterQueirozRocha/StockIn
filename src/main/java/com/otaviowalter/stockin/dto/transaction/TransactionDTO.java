@@ -1,8 +1,7 @@
 package com.otaviowalter.stockin.dto.transaction;
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Date;
+import java.time.Instant;
 
 import com.otaviowalter.stockin.dto.users.UserDTO;
 import com.otaviowalter.stockin.enums.TransactionENUM;
@@ -23,14 +22,14 @@ public class TransactionDTO {
 	@NotBlank(message = "there must be a type")
 	private TransactionENUM type;
 
-	private BigDecimal totalPrice;
-	private Date createdAt;
+	private Instant createdAt;
 	private UserDTO user;
 
 	public TransactionDTO(Transaction entity) {
 		id = entity.getId();
-		createdAt = new Date();
+		createdAt = entity.getCreatedAt();
 		user = new UserDTO(entity.getUser());
+		type = entity.getType();
 	}
 
 }

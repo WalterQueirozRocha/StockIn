@@ -14,9 +14,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.otaviowalter.stockin.dto.sales.SalesDTO;
 import com.otaviowalter.stockin.dto.salesitems.SaleItemsDTO;
+import com.otaviowalter.stockin.dto.transaction.SaleTransactionDTO;
+import com.otaviowalter.stockin.enums.TransactionENUM;
 import com.otaviowalter.stockin.exception.ResourceNotFoundException;
 import com.otaviowalter.stockin.model.SaleItems;
 import com.otaviowalter.stockin.model.Sales;
+import com.otaviowalter.stockin.model.TransactionSale;
 import com.otaviowalter.stockin.model.Users;
 import com.otaviowalter.stockin.repositorys.SaleItemsRepository;
 import com.otaviowalter.stockin.repositorys.SalesRepository;
@@ -41,6 +44,9 @@ public class SalesService {
 
 	@Autowired
 	private StockService stockService;
+	
+	@Autowired
+	private TransactionService transactionService;
 
 	@Transactional(readOnly = true)
 	public SalesDTO findById(UUID id) {
@@ -82,8 +88,11 @@ public class SalesService {
 		sale.setUser(user);
 
 		Sales savedSale = salesRepository.save(sale);
+		
+		SaleTransactionDTO transactionSale = createSaleTransactionDTO(savedSale);
+		transactionService.createTransactionSale(transactionSale);
+		
 		return new SalesDTO(savedSale);
-
 	}
 
 	@Transactional
@@ -127,5 +136,17 @@ public class SalesService {
 			throw new ResourceNotFoundException("Sale not found");
 		}
 		salesRepository.deleteById(id);
+	}
+
+	private SaleTransactionDTO createSaleTransactionDTO(Sales sale) {
+		TransactionSale transactionSale = new TransactionSale();
+
+		transactionSale.setCreatedAt(sale.getCreatedAt());
+		transactionSale.setSales(sale);
+		transactionSale.setType(TransactionENUM.SALE);
+		transactionSale.setUser(sale.getUser());
+
+		return new SaleTransactionDTO(transactionSale);
+
 	}
 }

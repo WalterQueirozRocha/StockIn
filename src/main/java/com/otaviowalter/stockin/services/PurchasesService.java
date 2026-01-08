@@ -14,13 +14,18 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.otaviowalter.stockin.dto.purchases.PurchasesDTO;
 import com.otaviowalter.stockin.dto.purchasesitems.PurchaseItemsDTO;
+import com.otaviowalter.stockin.dto.transaction.PurchaseTransactionDTO;
+import com.otaviowalter.stockin.enums.TransactionENUM;
 import com.otaviowalter.stockin.exception.ResourceNotFoundException;
 import com.otaviowalter.stockin.model.PurchaseItems;
 import com.otaviowalter.stockin.model.Purchases;
 import com.otaviowalter.stockin.model.Supplier;
+import com.otaviowalter.stockin.model.TransactionPurchase;
+import com.otaviowalter.stockin.model.Users;
 import com.otaviowalter.stockin.repositorys.PurchaseItemsRepository;
 import com.otaviowalter.stockin.repositorys.PurchasesRepository;
 import com.otaviowalter.stockin.repositorys.SupplierRepository;
+import com.otaviowalter.stockin.repositorys.UsersRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -32,6 +37,9 @@ public class PurchasesService {
 
 	@Autowired
 	private SupplierRepository supplierRepository;
+	
+	@Autowired
+	private UsersRepository usersRepository;
 
 	@Autowired
 	private PurchaseItemsRepository purchaseItemsRepository;
@@ -41,6 +49,9 @@ public class PurchasesService {
 
 	@Autowired
 	private StockService stockService;
+
+	@Autowired
+	private TransactionService transactionService;
 
 	@Transactional(readOnly = true)
 	public PurchasesDTO findById(UUID id) {
@@ -65,6 +76,9 @@ public class PurchasesService {
 
 		Supplier supplier = supplierRepository.findById(newPurchase.getSupplier().getId())
 				.orElseThrow(() -> new EntityNotFoundException("Supplier not found"));
+		
+		Users user = usersRepository.findById(newPurchase.getUser().getId())
+				.orElseThrow(() -> new EntityNotFoundException("User not found"));
 
 		for (PurchaseItemsDTO itemDTO : newPurchase.getItemsList()) {
 			PurchaseItemsDTO createdItemDTO = purchaseItemService.create(itemDTO);
@@ -88,8 +102,12 @@ public class PurchasesService {
 		purchase.setObservation(newPurchase.getObservation());
 		purchase.setSupplier(supplier);
 		purchase.setCreatedAt(Instant.now());
+		purchase.setUser(user);
 
 		Purchases savedPurchase = purchasesRepository.save(purchase);
+
+		PurchaseTransactionDTO transactionPurchase = createPurchaseTransactionDTO(savedPurchase);
+		transactionService.createTransactionPurchase(transactionPurchase);
 
 		return new PurchasesDTO(savedPurchase);
 	}
@@ -100,7 +118,9 @@ public class PurchasesService {
 				.orElseThrow(() -> new EntityNotFoundException("Purchase not found"));
 
 		purchase.getItemsList().clear();
-
+		
+		Users user = usersRepository.findById(dto.getUser().getId())
+				.orElseThrow(() -> new EntityNotFoundException("User not found"));
 
 		BigDecimal totalPrice = BigDecimal.ZERO;
 		BigDecimal totalCost = BigDecimal.ZERO;
@@ -113,7 +133,7 @@ public class PurchasesService {
 
 			PurchaseItems item = purchaseItemsRepository.findById(createdItemDTO.getId())
 					.orElseThrow(() -> new EntityNotFoundException("Item not found"));
-			
+
 			purchase.getItemsList().add(item);
 
 			totalPrice = totalPrice.add(createdItemDTO.getSubTotalPrice());
@@ -129,6 +149,7 @@ public class PurchasesService {
 		purchase.setObservation(dto.getObservation());
 		purchase.setSupplier(supplier);
 		purchase.setCreatedAt(Instant.now());
+		purchase.setUser(user);
 
 		Purchases savedPurchase = purchasesRepository.save(purchase);
 
@@ -143,4 +164,16 @@ public class PurchasesService {
 		}
 		purchasesRepository.deleteById(id);
 	}
+
+	private PurchaseTransactionDTO createPurchaseTransactionDTO(Purchases purchase) {
+		TransactionPurchase transactionPurchase = new TransactionPurchase();
+
+		transactionPurchase.setCreatedAt(purchase.getCreatedAt());
+		transactionPurchase.setPurchase(purchase);
+		transactionPurchase.setType(TransactionENUM.PURCHASE);
+		transactionPurchase.setUser(purchase.getUser());
+
+		return new PurchaseTransactionDTO(transactionPurchase);
+	}
+
 }

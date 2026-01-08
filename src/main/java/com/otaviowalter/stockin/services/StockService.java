@@ -24,78 +24,82 @@ import jakarta.transaction.Transactional;
 @Service
 public class StockService {
 
-    @Autowired
-    private InventoryRepository inventoryRepository;
+	@Autowired
+	private InventoryRepository inventoryRepository;
 
-    @Autowired
-    private ProductsRepository productsRepository;
+	@Autowired
+	private ProductsRepository productsRepository;
 
-    @Autowired
-    private StockMovementRepository stockMovementRepository;
-    
-    @Transactional
-    public StockDTO getStock(UUID productId) {
-        Products product = productsRepository.getReferenceById(productId);
+	@Autowired
+	private StockMovementRepository stockMovementRepository;
 
-        Inventory inventory = inventoryRepository.findByProduct(product);
-        int quantity = (inventory != null) ? inventory.getCurrentQuantity() : 0;
+	@Transactional
+	public StockDTO getStock(UUID productId) {
+		Products product = productsRepository.getReferenceById(productId);
 
-        return new StockDTO(new ProductStockDTO(product), quantity);
-    }
-    
-    @Transactional
-    public Page<StockDTO> getAllStock(Pageable pageable) {
-        return inventoryRepository.findAll(pageable)
-                .map(inv -> new StockDTO(new ProductStockDTO(inv.getProduct()), inv.getCurrentQuantity()));
-    }
+		Inventory inventory = inventoryRepository.findByProduct(product);
+		int quantity = (inventory != null) ? inventory.getCurrentQuantity() : 0;
 
-    @Transactional
-    public void registerEntry(UUID productId, int quantity, BigDecimal cost) {
-        Products product = productsRepository.getReferenceById(productId);
+		return new StockDTO(new ProductStockDTO(product), quantity);
+	}
 
-        Inventory inventory = inventoryRepository.findByProduct(product);
-        if (inventory == null) {
-            inventory = new Inventory();
-            inventory.setProduct(product);
-            inventory.setCurrentQuantity(0);
-            inventory.setMinimalQuantity(0);
-        }
+	@Transactional
+	public Page<StockDTO> getAllStock(Pageable pageable) {
+		return inventoryRepository.findAll(pageable)
+				.map(inv -> new StockDTO(new ProductStockDTO(inv.getProduct()), inv.getCurrentQuantity()));
+	}
 
-        inventory.setCurrentQuantity(inventory.getCurrentQuantity() + quantity);
-        inventory.setLastCost(cost);
-        inventory.setLastUpdate(Instant.now());
-        inventoryRepository.save(inventory);
+	@Transactional
+	public void registerEntry(UUID productId, int quantity, BigDecimal cost) {
+		Products product = productsRepository.getReferenceById(productId);
 
-        StockMovement movement = new StockMovement();
-        movement.setProduct(product);
-        movement.setType(MovementTypeENUM.ENTRY);
-        movement.setQuantity(quantity);
-        movement.setUnitCost(cost);
-        movement.setCreatedAt(Instant.now());
+		Inventory inventory = inventoryRepository.findByProduct(product);
+		if (inventory == null) {
+			inventory = new Inventory();
+			inventory.setProduct(product);
+			inventory.setCurrentQuantity(0);
+			inventory.setMinimalQuantity(0);
+		}
 
-        stockMovementRepository.save(movement);
-    }
+		inventory.setCurrentQuantity(inventory.getCurrentQuantity() + quantity);
+		inventory.setLastCost(cost);
+		inventory.setLastUpdate(Instant.now());
+		inventoryRepository.save(inventory);
 
-    @Transactional
-    public void registerExit(UUID productId, int quantity) {
-        Products product = productsRepository.getReferenceById(productId);
+		StockMovement movement = new StockMovement();
+		movement.setProduct(product);
+		movement.setType(MovementTypeENUM.ENTRY);
+		movement.setQuantity(quantity);
+		movement.setUnitCost(cost);
+		movement.setCreatedAt(Instant.now());
 
-        Inventory inventory = inventoryRepository.findByProduct(product);
-        if (inventory == null) {
-            throw new RuntimeException("No stock registered for this product");
-        }
+		stockMovementRepository.save(movement);
+	}
 
-        inventory.setCurrentQuantity(inventory.getCurrentQuantity() - quantity);
-        inventory.setLastUpdate(Instant.now());
-        inventoryRepository.save(inventory);
+	@Transactional
+	public void registerExit(UUID productId, int quantity) {
+		Products product = productsRepository.getReferenceById(productId);
 
-        StockMovement movement = new StockMovement();
-        movement.setProduct(product);
-        movement.setType(MovementTypeENUM.EXIT);
-        movement.setQuantity(quantity);
-        movement.setUnitCost(BigDecimal.ZERO);
-        movement.setCreatedAt(Instant.now());
+		Inventory inventory = inventoryRepository.findByProduct(product);
+		if (inventory == null) {
+			throw new RuntimeException("No stock registered for this product");
+		}
 
-        stockMovementRepository.save(movement);
-    }
+		if (inventory.getCurrentQuantity() - quantity < 0) {
+			throw new RuntimeException("No product in stock");
+		}
+
+		inventory.setCurrentQuantity(inventory.getCurrentQuantity() - quantity);
+		inventory.setLastUpdate(Instant.now());
+		inventoryRepository.save(inventory);
+
+		StockMovement movement = new StockMovement();
+		movement.setProduct(product);
+		movement.setType(MovementTypeENUM.EXIT);
+		movement.setQuantity(quantity);
+		movement.setUnitCost(BigDecimal.ZERO);
+		movement.setCreatedAt(Instant.now());
+
+		stockMovementRepository.save(movement);
+	}
 }

@@ -33,15 +33,22 @@ public class Purchases {
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private UUID id;
+	
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "purchase_id")
 	private List<PurchaseItems> itemsList = new ArrayList<>();
+	
 	private BigDecimal totalCost;
 	private BigDecimal totalPrice;
 	private BigDecimal discountPercentage;
 	private String observation;
 	private Instant createdAt;
+	
 	@ManyToOne
 	@JoinColumn(name = "supplier_id")
 	private Supplier supplier;
+	
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private Users user;
 }
