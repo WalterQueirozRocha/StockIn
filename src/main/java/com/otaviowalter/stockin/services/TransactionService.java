@@ -3,6 +3,7 @@ package com.otaviowalter.stockin.services;
 import java.math.BigInteger;
 import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import com.otaviowalter.stockin.dto.transaction.DevolutionTransactionDTO;
 import com.otaviowalter.stockin.dto.transaction.PurchaseTransactionDTO;
 import com.otaviowalter.stockin.dto.transaction.SaleTransactionDTO;
 import com.otaviowalter.stockin.dto.transaction.TransactionDTO;
+import com.otaviowalter.stockin.enums.TransactionENUM;
 import com.otaviowalter.stockin.exception.ResourceNotFoundException;
 import com.otaviowalter.stockin.model.Products;
 import com.otaviowalter.stockin.model.Purchases;
@@ -186,15 +188,14 @@ public class TransactionService {
 	@Transactional
 	public AdjustmentTransactionDTO createTransactionAdjustment(AdjustmentTransactionDTO newTransaction) {
 		TransactionAdjustment transaction = new TransactionAdjustment();
-		transaction.setType(newTransaction.getType());
+		transaction.setType(TransactionENUM.COST_ADJUSTMENT);
 		transaction.setCreatedAt(Instant.now());
+
+		transaction.setProductAfterAdjustment(newTransaction.getProductAfterAdjustment().toEntity());
+		transaction.setProductBeforeAdjustment(newTransaction.getProductBeforeAdjustment().toEntity());
 
 		Users user = userRepository.getReferenceById(newTransaction.getUser().getId());
 		transaction.setUser(user);
-
-		List<Products> products = newTransaction.getItems().stream()
-				.map(itemDTO -> productRepository.getReferenceById(itemDTO.getId())).collect(Collectors.toList());
-		transaction.setItems(products);
 
 		TransactionAdjustment savedTransaction = adjustmentTransactionRepository.save(transaction);
 		return new AdjustmentTransactionDTO(savedTransaction);
