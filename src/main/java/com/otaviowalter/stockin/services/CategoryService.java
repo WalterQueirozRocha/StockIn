@@ -35,7 +35,7 @@ public class CategoryService {
 			Page<Categorys> pages = categorysRepository.findAll(pageable);
 			return pages.map((categorys) -> new CategorysDTO(categorys));
 		} catch (ResourceNotFoundException e) {
-			throw new ResourceNotFoundException("User Not Found");
+			throw new ResourceNotFoundException("Category Not Found");
 		}
 	}
 

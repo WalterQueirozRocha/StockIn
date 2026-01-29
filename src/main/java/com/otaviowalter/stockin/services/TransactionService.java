@@ -3,7 +3,6 @@ package com.otaviowalter.stockin.services;
 import java.math.BigInteger;
 import java.time.Instant;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,28 +77,28 @@ public class TransactionService {
 	@Transactional(readOnly = true)
 	public PurchaseTransactionDTO findPurchaseById(BigInteger id) {
 		TransactionPurchase entity = purchaseTransactionRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Transaction Not Found"));
+				.orElseThrow(() -> new ResourceNotFoundException("Purchase Not Found"));
 		return new PurchaseTransactionDTO(entity);
 	}
 
 	@Transactional(readOnly = true)
 	public AdjustmentTransactionDTO findAdjustmentById(BigInteger id) {
 		TransactionAdjustment entity = adjustmentTransactionRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Transaction Not Found"));
+				.orElseThrow(() -> new ResourceNotFoundException("Adjustment Not Found"));
 		return new AdjustmentTransactionDTO(entity);
 	}
 
 	@Transactional(readOnly = true)
 	public DevolutionTransactionDTO findDevolutionById(BigInteger id) {
 		TransactionDevolution entity = devolutionTransactionRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Transaction Not Found"));
+				.orElseThrow(() -> new ResourceNotFoundException("Devolution Not Found"));
 		return new DevolutionTransactionDTO(entity);
 	}
 
 	@Transactional(readOnly = true)
 	public SaleTransactionDTO findSaleById(BigInteger id) {
 		TransactionSale entity = saleTransactionRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Transaction Not Found"));
+				.orElseThrow(() -> new ResourceNotFoundException("Sale Not Found"));
 		return new SaleTransactionDTO(entity);
 	}
 
@@ -149,7 +148,7 @@ public class TransactionService {
 			Page<TransactionSale> pages = saleTransactionRepository.findAll(pageable);
 			return pages.map((transaction) -> new SaleTransactionDTO(transaction));
 		} catch (ResourceNotFoundException e) {
-			throw new ResourceNotFoundException("Sale Not Found");
+			throw new ResourceNotFoundException("Sales Not Found");
 		}
 	}
 
@@ -188,7 +187,7 @@ public class TransactionService {
 	@Transactional
 	public AdjustmentTransactionDTO createTransactionAdjustment(AdjustmentTransactionDTO newTransaction) {
 		TransactionAdjustment transaction = new TransactionAdjustment();
-		transaction.setType(TransactionENUM.COST_ADJUSTMENT);
+		transaction.setType(TransactionENUM.ADJUSTMENT);
 		transaction.setCreatedAt(Instant.now());
 
 		transaction.setProductAfterAdjustment(newTransaction.getProductAfterAdjustment().toEntity());

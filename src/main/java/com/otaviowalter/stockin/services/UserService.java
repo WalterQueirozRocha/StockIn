@@ -35,7 +35,7 @@ public class UserService {
 			Page<Users> pages = userRepository.findAll(pageable);
 			return pages.map((user) -> new UserDTO(user));
 		} catch (ResourceNotFoundException e) {
-			throw new ResourceNotFoundException("User Not Found");
+			throw new ResourceNotFoundException("Users Not Found");
 		}
 	}
 

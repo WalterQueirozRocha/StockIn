@@ -1,7 +1,7 @@
 package com.otaviowalter.stockin.enums;
 
 public enum TransactionENUM {
-	PURCHASE("purchase"), SALE("sale"), COST_ADJUSTMENT("cost_adjustment"), DEVOLUTION("devolution");
+	PURCHASE("purchase"), SALE("sale"), ADJUSTMENT("adjustment"), DEVOLUTION("devolution");
 	
 	private String transaction;
 

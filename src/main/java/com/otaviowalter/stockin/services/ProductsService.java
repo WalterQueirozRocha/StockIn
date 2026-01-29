@@ -140,7 +140,7 @@ public class ProductsService {
 		TransactionAdjustment transactionAdjustment = new TransactionAdjustment();
 
 		transactionAdjustment.setCreatedAt(Instant.now());
-		transactionAdjustment.setType(TransactionENUM.COST_ADJUSTMENT);
+		transactionAdjustment.setType(TransactionENUM.ADJUSTMENT);
 		
 		
 		//PARA TESTE, APAGAR DEPOIS
