@@ -1,0 +1,11 @@
+package com.otaviowalter.stockin.repositorys;
+
+import java.util.UUID;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.otaviowalter.stockin.model.DevolutionItems;
+
+public interface DevolutionItemsRepository extends JpaRepository<DevolutionItems, UUID>{
+
+}

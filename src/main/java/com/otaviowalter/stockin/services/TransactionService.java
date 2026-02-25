@@ -2,8 +2,6 @@ package com.otaviowalter.stockin.services;
 
 import java.math.BigInteger;
 import java.time.Instant;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,7 +16,7 @@ import com.otaviowalter.stockin.dto.transaction.SaleTransactionDTO;
 import com.otaviowalter.stockin.dto.transaction.TransactionDTO;
 import com.otaviowalter.stockin.enums.TransactionENUM;
 import com.otaviowalter.stockin.exception.ResourceNotFoundException;
-import com.otaviowalter.stockin.model.Products;
+import com.otaviowalter.stockin.model.Devolution;
 import com.otaviowalter.stockin.model.Purchases;
 import com.otaviowalter.stockin.model.Sales;
 import com.otaviowalter.stockin.model.Transaction;
@@ -28,6 +26,7 @@ import com.otaviowalter.stockin.model.TransactionPurchase;
 import com.otaviowalter.stockin.model.TransactionSale;
 import com.otaviowalter.stockin.model.Users;
 import com.otaviowalter.stockin.repositorys.AdjustmentTransactionRepository;
+import com.otaviowalter.stockin.repositorys.DevolutionRepository;
 import com.otaviowalter.stockin.repositorys.DevolutionTransactionRepository;
 import com.otaviowalter.stockin.repositorys.ProductsRepository;
 import com.otaviowalter.stockin.repositorys.PurchaseTransactionRepository;
@@ -66,6 +65,12 @@ public class TransactionService {
 
 	@Autowired
 	private ProductsRepository productRepository;
+
+	@Autowired
+	private StockService stockService;
+
+	@Autowired
+	private DevolutionRepository devolutionRepository;
 
 	@Transactional(readOnly = true)
 	public TransactionDTO findById(BigInteger id) {
@@ -155,7 +160,7 @@ public class TransactionService {
 	@Transactional
 	public SaleTransactionDTO createTransactionSale(SaleTransactionDTO newTransaction) {
 		TransactionSale transaction = new TransactionSale();
-		transaction.setType(newTransaction.getType());
+		transaction.setType(TransactionENUM.SALE);
 		transaction.setCreatedAt(Instant.now());
 
 		Users user = userRepository.getReferenceById(newTransaction.getUser().getId());
@@ -171,7 +176,7 @@ public class TransactionService {
 	@Transactional
 	public PurchaseTransactionDTO createTransactionPurchase(PurchaseTransactionDTO newTransaction) {
 		TransactionPurchase transaction = new TransactionPurchase();
-		transaction.setType(newTransaction.getType());
+		transaction.setType(TransactionENUM.PURCHASE);
 		transaction.setCreatedAt(Instant.now());
 
 		Users user = userRepository.getReferenceById(newTransaction.getUser().getId());
@@ -203,18 +208,15 @@ public class TransactionService {
 	@Transactional
 	public DevolutionTransactionDTO createTransactionDevolution(DevolutionTransactionDTO newTransaction) {
 		TransactionDevolution transaction = new TransactionDevolution();
-		transaction.setType(newTransaction.getType());
+		transaction.setType(TransactionENUM.DEVOLUTION);
 		transaction.setCreatedAt(Instant.now());
+
+		Devolution devolution = devolutionRepository.getReferenceById(newTransaction.getDevolution().getId());
+
+		transaction.setDevolution(devolution);
 
 		Users user = userRepository.getReferenceById(newTransaction.getUser().getId());
 		transaction.setUser(user);
-
-		List<Products> products = newTransaction.getItems().stream()
-				.map(itemDTO -> productRepository.getReferenceById(itemDTO.getId())).collect(Collectors.toList());
-		transaction.setItems(products);
-
-		Sales sale = saleRepository.getReferenceById(newTransaction.getSales().getId());
-		transaction.setSales(sale);
 
 		TransactionDevolution savedTransaction = devolutionTransactionRepository.save(transaction);
 		return new DevolutionTransactionDTO(savedTransaction);
