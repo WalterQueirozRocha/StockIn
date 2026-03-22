@@ -52,6 +52,9 @@ public class PurchasesService {
 
 	@Autowired
 	private TransactionService transactionService;
+	
+	@Autowired
+	private AuthorizationService authorizationService;
 
 	@Transactional(readOnly = true)
 	public PurchasesDTO findById(UUID id) {
@@ -77,7 +80,7 @@ public class PurchasesService {
 		Supplier supplier = supplierRepository.findById(newPurchase.getSupplier().getId())
 				.orElseThrow(() -> new EntityNotFoundException("Supplier not found"));
 		
-		Users user = usersRepository.findById(newPurchase.getUser().getId())
+		Users user = usersRepository.findById(authorizationService.getAuthenticatedUser().getId())
 				.orElseThrow(() -> new EntityNotFoundException("User not found"));
 
 		for (PurchaseItemsDTO itemDTO : newPurchase.getItemsList()) {
@@ -119,7 +122,7 @@ public class PurchasesService {
 
 		purchase.getItemsList().clear();
 		
-		Users user = usersRepository.findById(dto.getUser().getId())
+		Users user = usersRepository.findById(authorizationService.getAuthenticatedUser().getId())
 				.orElseThrow(() -> new EntityNotFoundException("User not found"));
 
 		BigDecimal totalPrice = BigDecimal.ZERO;

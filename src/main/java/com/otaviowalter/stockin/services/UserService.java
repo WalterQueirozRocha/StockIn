@@ -86,15 +86,4 @@ public class UserService {
 		}
 	}
 
-	@Transactional
-	public void updatePassword(String email, UpdatePasswordDTO dto) {
-		Users entity = (Users) userRepository.findByEmail(email);
-		if (!new BCryptPasswordEncoder().matches(dto.getOldPassword(), entity.getPassword())) {
-			throw new IllegalArgumentException("Wrong password");
-		}
-		String encryptedPassword = new BCryptPasswordEncoder().encode(dto.getNewPassword());
-		entity.setPassword(encryptedPassword);
-		entity = userRepository.save(entity);
-	}
-
 }

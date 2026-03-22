@@ -43,9 +43,11 @@ public class ProductsService {
 	@Autowired
 	private TransactionService transactionService;
 	
-	//REMOVER DEPOIS, APENAS PARA TESTE
 	@Autowired
-	private UsersRepository userRepository;
+	private UsersRepository usersRepository;
+	
+	@Autowired
+	private AuthorizationService authorizationService;
 
 	@Transactional(readOnly = true)
 	public ProductsDTO findById(UUID id) {
@@ -142,10 +144,8 @@ public class ProductsService {
 		transactionAdjustment.setCreatedAt(Instant.now());
 		transactionAdjustment.setType(TransactionENUM.ADJUSTMENT);
 		
-		
-		//PARA TESTE, APAGAR DEPOIS
-		UUID testUserId = UUID.fromString("8108482f-6929-4ec4-a962-4531d32e4cec");
-		Users user = userRepository.getReferenceById(testUserId);
+		Users user = usersRepository.findById(authorizationService.getAuthenticatedUser().getId())
+				.orElseThrow(() -> new EntityNotFoundException("User not found"));
 		transactionAdjustment.setUser(user);
 		
 		transactionAdjustment.setProductBeforeAdjustment(oldProduct);

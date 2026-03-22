@@ -47,6 +47,9 @@ public class SalesService {
 	
 	@Autowired
 	private TransactionService transactionService;
+	
+	@Autowired
+	private AuthorizationService authorizationService;
 
 	@Transactional(readOnly = true)
 	public SalesDTO findById(UUID id) {
@@ -66,7 +69,7 @@ public class SalesService {
 		List<SaleItems> itemsList = new ArrayList<>();
 		BigDecimal totalPrice = BigDecimal.ZERO;
 
-		Users user = usersRepository.findById(newSale.getUser().getId())
+		Users user = usersRepository.findById(authorizationService.getAuthenticatedUser().getId())
 				.orElseThrow(() -> new EntityNotFoundException("User not found"));
 
 		for (SaleItemsDTO itemDTO : newSale.getProductList()) {
@@ -101,7 +104,7 @@ public class SalesService {
 
 		sale.getProductList().clear();
 
-		Users user = usersRepository.findById(dto.getUser().getId())
+		Users user = usersRepository.findById(authorizationService.getAuthenticatedUser().getId())
 				.orElseThrow(() -> new EntityNotFoundException("User not found"));
 
 		BigDecimal totalPrice = BigDecimal.ZERO;

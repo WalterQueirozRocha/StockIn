@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.otaviowalter.stockin.dto.users.UpdatePasswordDTO;
 import com.otaviowalter.stockin.dto.users.UserDTO;
 import com.otaviowalter.stockin.dto.users.UserRegisterDTO;
 import com.otaviowalter.stockin.services.UserService;
@@ -46,7 +45,7 @@ public class UserController {
 
 	@PostMapping("/register")
 	public ResponseEntity<UserDTO> createUser(@RequestBody @Valid UserRegisterDTO registerUser) {
-		
+
 		UserDTO registeredUser = service.register(registerUser);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(registeredUser.getId())
 				.toUri();
@@ -58,13 +57,6 @@ public class UserController {
 	public ResponseEntity<UserDTO> updateUser(@PathVariable UUID id, @RequestBody @Valid UserDTO dto) {
 		dto = service.update(id, dto);
 		return ResponseEntity.ok(dto);
-	}
-
-	@PutMapping(value = "/updatePassword/{login}")
-	public ResponseEntity<UserDTO> updatePassword(@PathVariable String name,
-			@RequestBody @Valid UpdatePasswordDTO dto) {
-		service.updatePassword(name, dto);
-		return ResponseEntity.noContent().build();
 	}
 
 	@DeleteMapping(value = "/{id}")
