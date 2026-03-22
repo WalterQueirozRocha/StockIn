@@ -6,9 +6,11 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.otaviowalter.stockin.dto.users.UpdatePasswordDTO;
 import com.otaviowalter.stockin.dto.users.UserDTO;
 import com.otaviowalter.stockin.dto.users.UserRegisterDTO;
 import com.otaviowalter.stockin.exception.ResourceNotFoundException;
@@ -41,12 +43,17 @@ public class UserService {
 
 	@Transactional
 	public UserDTO register(UserRegisterDTO newUser) {
+
+		if (this.userRepository.findByEmail(newUser.getName()) != null) {
+			throw new RuntimeException("User already registered");
+		}
+
 		Users user = new Users();
 		user.setName(newUser.getName());
 		user.setEmail(newUser.getEmail());
 		user.setRole(newUser.getRole());
 
-		String encryptedPassword = newUser.getPassword();//new BCryptPasswordEncoder().encode(newUser.getPassword());
+		String encryptedPassword = new BCryptPasswordEncoder().encode(newUser.getPassword());
 		user.setPassword(encryptedPassword);
 
 		user.setAdminition(new Date());
@@ -79,16 +86,15 @@ public class UserService {
 		}
 	}
 
-	/*
 	@Transactional
-	public void updatePassword(String name, UpdatePasswordDTO dto) {
-		Users entity = (Users) userRepository.findByName(name);
+	public void updatePassword(String email, UpdatePasswordDTO dto) {
+		Users entity = (Users) userRepository.findByEmail(email);
 		if (!new BCryptPasswordEncoder().matches(dto.getOldPassword(), entity.getPassword())) {
 			throw new IllegalArgumentException("Wrong password");
 		}
 		String encryptedPassword = new BCryptPasswordEncoder().encode(dto.getNewPassword());
 		entity.setPassword(encryptedPassword);
 		entity = userRepository.save(entity);
-	}*/
+	}
 
 }
