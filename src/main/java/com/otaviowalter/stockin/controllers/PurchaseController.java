@@ -20,28 +20,34 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.otaviowalter.stockin.dto.purchases.PurchasesDTO;
 import com.otaviowalter.stockin.services.PurchasesService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/purchase")
+@Tag(name = "Purchases", description = "Purchases management")
 public class PurchaseController {
 
 	@Autowired
 	private PurchasesService service;
 
 	@GetMapping("/{id}")
+	@Operation(summary = "Find a purchase by ID")
 	public ResponseEntity<PurchasesDTO> findById(@PathVariable UUID id) {
 		PurchasesDTO findById = service.findById(id);
 		return ResponseEntity.ok(findById);
 	}
 
 	@GetMapping
+	@Operation(summary = "Find all purchases")
 	public ResponseEntity<Page<PurchasesDTO>> findAllPurchases(Pageable pageable) {
 		Page<PurchasesDTO> dtoPages = service.findAll(pageable);
 		return ResponseEntity.ok(dtoPages);
 	}
 
 	@PostMapping("/register")
+	@Operation(summary = "Register a new purchase")
 	public ResponseEntity<PurchasesDTO> createPurchase(@RequestBody @Valid PurchasesDTO createPurchase) {
 		PurchasesDTO createdPurchase = service.create(createPurchase);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(createdPurchase.getId())
@@ -50,12 +56,14 @@ public class PurchaseController {
 	}
 
 	@PutMapping(value = "/{id}")
+	@Operation(summary = "Update a purchase by ID")
 	public ResponseEntity<PurchasesDTO> updatePurchase(@PathVariable UUID id, @RequestBody @Valid PurchasesDTO dto) {
 		dto = service.update(id, dto);
 		return ResponseEntity.ok(dto);
 	}
 
 	@DeleteMapping(value = "/{id}")
+	@Operation(summary = "Delete a purchase by ID")
 	public ResponseEntity<Void> deletePurchase(@PathVariable UUID id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();

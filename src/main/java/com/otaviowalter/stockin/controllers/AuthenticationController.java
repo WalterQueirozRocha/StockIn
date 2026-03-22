@@ -14,10 +14,13 @@ import com.otaviowalter.stockin.dto.users.UserLoginResponseDTO;
 import com.otaviowalter.stockin.infra.security.TokenService;
 import com.otaviowalter.stockin.model.Users;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("authentication")
+@Tag(name = "Authentication", description = "Login with email and password")
 public class AuthenticationController {
 
 	@Autowired
@@ -28,6 +31,7 @@ public class AuthenticationController {
 	private AuthenticationManager authenticationManager;
 
 	@PostMapping("/login")
+	@Operation(summary = "Login", description = "Logs the user in and returns the token")
 	public ResponseEntity<UserLoginResponseDTO> login(@RequestBody @Valid UserAuthenticationDTO dto) {
 		var emailPassword = new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword());
 		var auth = this.authenticationManager.authenticate(emailPassword);

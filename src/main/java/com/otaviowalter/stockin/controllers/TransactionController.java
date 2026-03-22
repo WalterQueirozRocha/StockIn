@@ -18,68 +18,82 @@ import com.otaviowalter.stockin.dto.transaction.SaleTransactionDTO;
 import com.otaviowalter.stockin.dto.transaction.TransactionDTO;
 import com.otaviowalter.stockin.services.TransactionService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/transaction")
+@Tag(name = "Transactions", description = "GET endpoints for auditing and transaction history")
 public class TransactionController {
 
 	@Autowired
 	private TransactionService service;
 
 	@GetMapping("/{id}")
+	@Operation(summary = "Find a simple transaction by ID")
 	public ResponseEntity<TransactionDTO> findById(@PathVariable BigInteger id) {
 		TransactionDTO dto = service.findById(id);
 		return ResponseEntity.ok(dto);
 	}
 
 	@GetMapping("/sale/{id}")
+	@Operation(summary = "Find a sale transaction by ID")
 	public ResponseEntity<SaleTransactionDTO> findSaleById(@PathVariable BigInteger id) {
 		SaleTransactionDTO dto = service.findSaleById(id);
 		return ResponseEntity.ok(dto);
 	}
 
 	@GetMapping("/purchase/{id}")
+	@Operation(summary = "Find a purchase transaction by ID")
 	public ResponseEntity<PurchaseTransactionDTO> findPurchaseById(@PathVariable BigInteger id) {
 		PurchaseTransactionDTO dto = service.findPurchaseById(id);
 		return ResponseEntity.ok(dto);
 	}
 
 	@GetMapping("/devolution/{id}")
+	@Operation(summary = "Find a devolution transaction by ID")
 	public ResponseEntity<DevolutionTransactionDTO> findDevolutionById(@PathVariable BigInteger id) {
 		DevolutionTransactionDTO dto = service.findDevolutionById(id);
 		return ResponseEntity.ok(dto);
 	}
 
 	@GetMapping("/adjustment/{id}")
+	@Operation(summary = "Find a product adjustment transaction by ID")
 	public ResponseEntity<AdjustmentTransactionDTO> findAdjustmentById(@PathVariable BigInteger id) {
 		AdjustmentTransactionDTO dto = service.findAdjustmentById(id);
 		return ResponseEntity.ok(dto);
 	}
 
 	@GetMapping
+	@Operation(summary = "Find all simple transactions")
 	public ResponseEntity<Page<TransactionDTO>> findAllTransactions(Pageable pageable) {
 		Page<TransactionDTO> dtoPages = service.findAll(pageable);
 		return ResponseEntity.ok(dtoPages);
 	}
 
 	@GetMapping("/sales")
+	@Operation(summary = "Find all sales transactions")
 	public ResponseEntity<Page<SaleTransactionDTO>> findAllSalesTransactions(Pageable pageable) {
 		Page<SaleTransactionDTO> dtoPages = service.findAllSales(pageable);
 		return ResponseEntity.ok(dtoPages);
 	}
 
 	@GetMapping("/purchases")
+	@Operation(summary = "Find all purchases transactions")
 	public ResponseEntity<Page<PurchaseTransactionDTO>> findAllPurchasesTransactions(Pageable pageable) {
 		Page<PurchaseTransactionDTO> dtoPages = service.findAllPurchases(pageable);
 		return ResponseEntity.ok(dtoPages);
 	}
 
 	@GetMapping("/devolutions")
+	@Operation(summary = "Find all devolutions transactions")
 	public ResponseEntity<Page<DevolutionTransactionDTO>> findAllDevolutionsTransactions(Pageable pageable) {
 		Page<DevolutionTransactionDTO> dtoPages = service.findAllDevolutions(pageable);
 		return ResponseEntity.ok(dtoPages);
 	}
 
 	@GetMapping("/adjustments")
+	@Operation(summary = "Find all products adjustments transactions")
 	public ResponseEntity<Page<AdjustmentTransactionDTO>> findAllAdjustmentsTransactions(Pageable pageable) {
 		Page<AdjustmentTransactionDTO> dtoPages = service.findAllAdjustments(pageable);
 		return ResponseEntity.ok(dtoPages);

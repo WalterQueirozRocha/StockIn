@@ -20,27 +20,33 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.otaviowalter.stockin.dto.supplier.SupplierDTO;
 import com.otaviowalter.stockin.services.SupplierService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/supplier")
+@Tag(name = "Suppliers", description = "Supplier management")
 public class SupplierController {
 	@Autowired
 	private SupplierService service;
 
 	@GetMapping("/{id}")
+	@Operation(summary = "Find supplier by ID")
 	public ResponseEntity<SupplierDTO> findById(@PathVariable UUID id) {
 		SupplierDTO findById = service.findById(id);
 		return ResponseEntity.ok(findById);
 	}
 
 	@GetMapping
+	@Operation(summary = "Find all suppliers")
 	public ResponseEntity<Page<SupplierDTO>> findAllSuppliers(Pageable pageable) {
 		Page<SupplierDTO> dtoPages = service.findAll(pageable);
 		return ResponseEntity.ok(dtoPages);
 	}
 
 	@PostMapping("/register")
+	@Operation(summary = "Register a new supplier")
 	public ResponseEntity<SupplierDTO> createSupplier(@RequestBody @Valid SupplierDTO createSupplier) {
 		SupplierDTO createdSupplier = service.create(createSupplier);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(createdSupplier.getId())
@@ -49,12 +55,14 @@ public class SupplierController {
 	}
 
 	@PutMapping(value = "/{id}")
+	@Operation(summary = "Update a supplier by ID")
 	public ResponseEntity<SupplierDTO> updateSupplier(@PathVariable UUID id, @RequestBody @Valid SupplierDTO dto) {
 		dto = service.update(id, dto);
 		return ResponseEntity.ok(dto);
 	}
 
 	@DeleteMapping(value = "/{id}")
+	@Operation(summary = "Delete a supplier by ID")
 	public ResponseEntity<Void> deleteSupplier(@PathVariable UUID id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();

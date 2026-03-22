@@ -28,7 +28,6 @@ import com.otaviowalter.stockin.model.Users;
 import com.otaviowalter.stockin.repositorys.AdjustmentTransactionRepository;
 import com.otaviowalter.stockin.repositorys.DevolutionRepository;
 import com.otaviowalter.stockin.repositorys.DevolutionTransactionRepository;
-import com.otaviowalter.stockin.repositorys.ProductsRepository;
 import com.otaviowalter.stockin.repositorys.PurchaseTransactionRepository;
 import com.otaviowalter.stockin.repositorys.PurchasesRepository;
 import com.otaviowalter.stockin.repositorys.SaleTransactionRepository;
@@ -62,12 +61,6 @@ public class TransactionService {
 
 	@Autowired
 	private SalesRepository saleRepository;
-
-	@Autowired
-	private ProductsRepository productRepository;
-
-	@Autowired
-	private StockService stockService;
 
 	@Autowired
 	private DevolutionRepository devolutionRepository;
