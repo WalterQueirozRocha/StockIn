@@ -26,6 +26,8 @@
 
 ## API Documentation
 The API is fully documented with **Swagger/OpenAPI**
+- OpenAPI JSON (view on GitHub): [Swagger.json](https://github.com/WalterQueirozRocha/StockIn/blob/main/docs/Swagger.json)
+- **Copy and paste the JSON into [Swagger Editor](https://editor.swagger.io)**
 
 ---
 
@@ -55,3 +57,5 @@ The API is fully documented with **Swagger/OpenAPI**
 
 ## Documentação da API
 A API está totalmente documentada com **Swagger/OpenAPI**.
+- OpenAPI JSON (Acesso no GitHub): [Swagger.json](https://github.com/WalterQueirozRocha/StockIn/blob/main/docs/Swagger.json)
+- **Copie e cole o JSON no [Swagger Editor](https://editor.swagger.io)**
