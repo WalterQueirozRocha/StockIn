@@ -41,7 +41,7 @@ public class TokenService {
 	}
 
 	private Instant generateExpirationDate() {
-		return Instant.now().plus(Duration.ofHours(2));
+		return Instant.now().plus(Duration.ofMinutes(30));
 	}
 
 }
