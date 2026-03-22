@@ -10,10 +10,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.otaviowalter.stockin.dto.users.UpdatePasswordDTO;
 import com.otaviowalter.stockin.dto.users.UserDTO;
 import com.otaviowalter.stockin.dto.users.UserRegisterDTO;
-import com.otaviowalter.stockin.exception.ResourceNotFoundException;
+import com.otaviowalter.stockin.exception.exceptions.BusinessException;
+import com.otaviowalter.stockin.exception.exceptions.ResourceNotFoundException;
 import com.otaviowalter.stockin.model.Users;
 import com.otaviowalter.stockin.repositorys.UsersRepository;
 
@@ -45,7 +45,7 @@ public class UserService {
 	public UserDTO register(UserRegisterDTO newUser) {
 
 		if (this.userRepository.findByEmail(newUser.getName()) != null) {
-			throw new RuntimeException("User already registered");
+			throw new BusinessException("User already registered");
 		}
 
 		Users user = new Users();

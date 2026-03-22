@@ -19,7 +19,7 @@ import com.otaviowalter.stockin.dto.products.ProductsCreateDTO;
 import com.otaviowalter.stockin.dto.products.ProductsDTO;
 import com.otaviowalter.stockin.dto.transaction.AdjustmentTransactionDTO;
 import com.otaviowalter.stockin.enums.TransactionENUM;
-import com.otaviowalter.stockin.exception.ResourceNotFoundException;
+import com.otaviowalter.stockin.exception.exceptions.ResourceNotFoundException;
 import com.otaviowalter.stockin.model.Categorys;
 import com.otaviowalter.stockin.model.Products;
 import com.otaviowalter.stockin.model.ProductsSnapshot;

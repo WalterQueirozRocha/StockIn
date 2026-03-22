@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.otaviowalter.stockin.dto.supplier.SupplierDTO;
-import com.otaviowalter.stockin.exception.ResourceNotFoundException;
+import com.otaviowalter.stockin.exception.exceptions.ResourceNotFoundException;
 import com.otaviowalter.stockin.model.Supplier;
 import com.otaviowalter.stockin.repositorys.SupplierRepository;
 

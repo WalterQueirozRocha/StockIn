@@ -16,7 +16,7 @@ import com.otaviowalter.stockin.dto.sales.SalesDTO;
 import com.otaviowalter.stockin.dto.salesitems.SaleItemsDTO;
 import com.otaviowalter.stockin.dto.transaction.SaleTransactionDTO;
 import com.otaviowalter.stockin.enums.TransactionENUM;
-import com.otaviowalter.stockin.exception.ResourceNotFoundException;
+import com.otaviowalter.stockin.exception.exceptions.ResourceNotFoundException;
 import com.otaviowalter.stockin.model.SaleItems;
 import com.otaviowalter.stockin.model.Sales;
 import com.otaviowalter.stockin.model.TransactionSale;

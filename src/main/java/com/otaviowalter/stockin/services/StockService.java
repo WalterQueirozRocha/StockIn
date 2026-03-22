@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.otaviowalter.stockin.dto.products.ProductStockDTO;
 import com.otaviowalter.stockin.dto.stock.StockDTO;
 import com.otaviowalter.stockin.enums.MovementTypeENUM;
+import com.otaviowalter.stockin.exception.exceptions.BusinessException;
 import com.otaviowalter.stockin.model.Inventory;
 import com.otaviowalter.stockin.model.Products;
 import com.otaviowalter.stockin.model.StockMovement;
@@ -82,11 +83,11 @@ public class StockService {
 
 		Inventory inventory = inventoryRepository.findByProduct(product);
 		if (inventory == null) {
-			throw new RuntimeException("No stock registered for this product");
+			throw new BusinessException("No stock registered for this product");
 		}
 
 		if (inventory.getCurrentQuantity() - quantity < 0) {
-			throw new RuntimeException("No product in stock");
+			throw new BusinessException("Insufficient stock for this product. Current quantity : " + inventory.getCurrentQuantity());
 		}
 
 		inventory.setCurrentQuantity(inventory.getCurrentQuantity() - quantity);

@@ -16,7 +16,8 @@ import com.otaviowalter.stockin.dto.devolutionitems.DevolutionItemsDTO;
 import com.otaviowalter.stockin.dto.devolutions.DevolutionDTO;
 import com.otaviowalter.stockin.dto.transaction.DevolutionTransactionDTO;
 import com.otaviowalter.stockin.enums.TransactionENUM;
-import com.otaviowalter.stockin.exception.ResourceNotFoundException;
+import com.otaviowalter.stockin.exception.exceptions.BusinessException;
+import com.otaviowalter.stockin.exception.exceptions.ResourceNotFoundException;
 import com.otaviowalter.stockin.model.Devolution;
 import com.otaviowalter.stockin.model.DevolutionItems;
 import com.otaviowalter.stockin.model.SaleItems;
@@ -87,7 +88,7 @@ public class DevolutionService {
 					.orElseThrow(() -> new EntityNotFoundException("Product was not part of this sale"));
 
 			if (itemDTO.getQuantity() > saleItem.getQuantity()) {
-				throw new EntityNotFoundException("Returned quantity (" + itemDTO.getQuantity()
+				throw new BusinessException("Returned quantity (" + itemDTO.getQuantity()
 						+ ") exceeds sold quantity (" + saleItem.getQuantity() + ")");
 			}
 
@@ -136,7 +137,7 @@ public class DevolutionService {
 					.orElseThrow(() -> new EntityNotFoundException("Product was not part of this sale"));
 
 			if (itemDTO.getQuantity() > saleItem.getQuantity()) {
-				throw new EntityNotFoundException("Returned quantity (" + itemDTO.getQuantity()
+				throw new BusinessException("Returned quantity (" + itemDTO.getQuantity()
 						+ ") exceeds sold quantity (" + saleItem.getQuantity() + ")");
 			}
 

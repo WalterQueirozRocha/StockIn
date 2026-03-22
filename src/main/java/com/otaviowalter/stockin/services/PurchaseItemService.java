@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.otaviowalter.stockin.dto.purchasesitems.PurchaseItemsDTO;
-import com.otaviowalter.stockin.exception.ResourceNotFoundException;
+import com.otaviowalter.stockin.exception.exceptions.ResourceNotFoundException;
 import com.otaviowalter.stockin.model.Products;
 import com.otaviowalter.stockin.model.PurchaseItems;
 import com.otaviowalter.stockin.repositorys.ProductsRepository;
